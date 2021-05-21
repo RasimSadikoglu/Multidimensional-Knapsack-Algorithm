@@ -10,7 +10,7 @@ extern int errno;
 #define FILE_NAME_SIZE 50
 
 // noi: (N)umber (o)f (I)tems - now: (N)umber (o)f (W)eights
-void knapsack_solution(item items[], size_t *weight_limits, size_t noi, size_t now);
+void knapsack_solution(item items[], int *weight_limits, int noi, int now);
 
 int main(int argc, char **argv) {
 
@@ -38,26 +38,26 @@ int main(int argc, char **argv) {
     }
 
     // Take inputs from the file
-    size_t num_of_items, num_of_weights;
-    fscanf(input_file, "%lu %lu", &num_of_items, &num_of_weights);
+    int num_of_items, num_of_weights;
+    fscanf(input_file, "%d %d", &num_of_items, &num_of_weights);
 
     item items[num_of_items];
 
-    for (size_t i = 0; i < num_of_items; i++) {
-        size_t value;
-        fscanf(input_file, "%lu", &value);
+    for (int i = 0; i < num_of_items; i++) {
+        int value;
+        fscanf(input_file, "%d", &value);
         
         items[i] = item_create(value, num_of_weights);
     }
 
-    size_t weight_limits[num_of_weights];
-    for (size_t i = 0; i < num_of_weights; i++) {
-        fscanf(input_file, "%lu", weight_limits + i);
+    int weight_limits[num_of_weights];
+    for (int i = 0; i < num_of_weights; i++) {
+        fscanf(input_file, "%d", weight_limits + i);
     }
 
-    for (size_t i = 0; i < num_of_weights; i++) {
-        for (size_t j = 0; j < num_of_items; j++) {
-            fscanf(input_file, "%lu", &(items[j].weights[i]));
+    for (int i = 0; i < num_of_weights; i++) {
+        for (int j = 0; j < num_of_items; j++) {
+            fscanf(input_file, "%d", &(items[j].weights[i]));
         }
     }
 
@@ -67,14 +67,14 @@ int main(int argc, char **argv) {
     knapsack_solution(items, weight_limits, num_of_items, num_of_weights);
 
     // Free memory before quit
-    for (size_t i = 0; i < num_of_items; i++) {
+    for (int i = 0; i < num_of_items; i++) {
         item_free(items + i);
     }
 
     return 0;
 }
 
-void knapsack_solution(item items[], size_t weight_limits[], size_t noi, size_t now) {
+void knapsack_solution(item items[], int weight_limits[], int noi, int now) {
 
     /*
 

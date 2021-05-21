@@ -1,10 +1,10 @@
 #include "item.h"
 
-item item_create(size_t val, size_t num_of_weights) {
+item item_create(int val, int num_of_weights) {
     item i;
     i.value = val;
 
-    i.weights = malloc(sizeof(size_t) * num_of_weights);
+    i.weights = malloc(sizeof(int) * num_of_weights);
 
     if (i.weights == NULL) {
         fprintf(stderr, "Memory allocation error!\n");

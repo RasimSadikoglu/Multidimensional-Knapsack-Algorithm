@@ -5,11 +5,11 @@
 #include <stdio.h>
 
 typedef struct {
-    size_t value;
-    size_t *weights;
+    int value;
+    int *weights;
 } item;
 
-item item_create(size_t val, size_t num_of_weights);
+item item_create(int val, int num_of_weights);
 
 void item_free(item *i);
 
