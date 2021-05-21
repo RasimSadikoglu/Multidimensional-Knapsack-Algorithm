@@ -38,8 +38,8 @@ int main(int argc, char **argv) {
     }
 
     // Take inputs from the file
-    int num_of_items, num_of_weights;
-    fscanf(input_file, "%d %d", &num_of_items, &num_of_weights);
+    int num_of_weights, num_of_items;
+    fscanf(input_file, "%d %d", &num_of_weights, &num_of_items);
 
     item items[num_of_items];
 
