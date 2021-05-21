@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void knapsack_solution(item items[], size_t *weight_limits, size_t noi, size_t now) {
+void knapsack_solution(item items[], size_t weight_limits[], size_t noi, size_t now) {
 
     /*
 
