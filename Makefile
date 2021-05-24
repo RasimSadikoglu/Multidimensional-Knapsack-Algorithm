@@ -1,4 +1,3 @@
-run:
-	gcc -g -Wall -Wextra -Wpedantic main.c item.c -o main
+make:
+	g++ -g -Wall -Wextra -Wpedantic -o main main.cpp
 	./main input.txt
-	rm main
