@@ -8,7 +8,7 @@ using std::vector;
 using std::map;
 
 void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits);
-int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &table, const vector<int> weights);
+int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> &weights);
 
 int main(int argc, char **argv) {
 
@@ -40,6 +40,8 @@ int main(int argc, char **argv) {
         }
     }
 
+    input.close();
+
     auto start_time = std::chrono::high_resolution_clock::now();
     knapsack_solve(items, knapsack_limits);
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -66,31 +68,38 @@ void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits)
     return;
 }
 
-int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &table, const vector<int> weights) {
+int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> &weights) {
 
-    if (weights.back() == -1) return 0;
+    int *val, item;
+    if ((item = weights.back()) == -1) return 0;
 
-    if (table[weights] != 0) return table[weights] == -1 ? 0 : table[weights];
-
+    val = &table[weights];
     vector<int> cweights(weights);
+    //weights.clear();
+
+    if (*val != 0) {
+        //std::cout << weights.back() << std::endl;
+        return *val == -1 ? 0 : *val;
+    }
+    
     cweights[cweights.size() - 1]--;
     int p1 = knapsack_helper(items, table, cweights);
 
     for (size_t i = 0; i < cweights.size() - 1; i++) {
-        if (cweights[i] - items[weights.back()][i + 1] < 0) {
-            if (p1 == 0) table[weights] = -1;
-            else table[weights] = p1;
+        if (cweights[i] - items[item][i + 1] < 0) {
+            if (p1 == 0) *val = -1;
+            else *val = p1;
             return p1;
         }
-        cweights[i] -= items[weights.back()][i + 1];
+        cweights[i] -= items[item][i + 1];
     }
 
-    int p2 = knapsack_helper(items, table, cweights) + items[weights.back()][0];
+    int p2 = knapsack_helper(items, table, cweights) + items[item][0];
 
-    if (p2 >= p1) table[weights] = p2;
-    else table[weights] = p1;
+    if (p2 >= p1) *val = p2;
+    else *val = p1;
 
-    if (table[weights] == 0) table[weights] = -1;
+    if (*val == 0) *val = -1;
 
-    return table[weights];
+    return *val;
 }
