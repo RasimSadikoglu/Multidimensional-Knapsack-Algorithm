@@ -8,25 +8,33 @@ using std::vector;
 using std::map;
 
 void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits);
-int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> &weights);
+int knapsack_dp(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> &weights);
 
 int main(int argc, char **argv) {
 
-    if (argc != 2) {
+    std::ifstream input;
+    
+    if (argc == 1) {
+        std::string file_name;
+        std::cout << "Please enter the filename: ";
+        std::cin >> file_name;
+
+        input.open(file_name, std::ifstream::in);
+    } else if (argc == 2) {
+        input.open(argv[1], std::ifstream::in);
+    } else {
         std::cout << "Wrong Usage!\nUsage: " << argv[0] << " <filename>" << std::endl;
         return 1;
     }
-
-    std::ifstream input(argv[1], std::ifstream::in);
 
     int number_of_knapsacks, number_of_items;
     input >> number_of_knapsacks >> number_of_items;
 
     vector<vector<int>> items(number_of_items);
     for (int i = 0; i < number_of_items; i++) {
-        int val;
-        input >> val;
-        items[i].push_back(val);
+        int value;
+        input >> value;
+        items[i].push_back(value);
     }
 
     vector<int> knapsack_limits(number_of_knapsacks);
@@ -34,9 +42,9 @@ int main(int argc, char **argv) {
 
     for (int i = 0; i < number_of_knapsacks; i++) {
         for (int j = 0; j < number_of_items; j++) {
-            int val;
-            input >> val;
-            items[j].push_back(val);
+            int weight;
+            input >> weight;
+            items[j].push_back(weight);
         }
     }
 
@@ -61,14 +69,14 @@ void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits)
     weights.push_back(items.size() - 1);
 
     vector<int> res_items;
-    int result = knapsack_helper(items, table, weights);
+    int result = knapsack_dp(items, table, weights);
 
     std::cout << result << std::endl;
 
     return;
 }
 
-int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> &weights) {
+int knapsack_dp(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> &weights) {
 
     int *val, item;
     if ((item = weights.back()) == -1) return 0;
@@ -83,7 +91,7 @@ int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &tab
     }
     
     cweights[cweights.size() - 1]--;
-    int p1 = knapsack_helper(items, table, cweights);
+    int p1 = knapsack_dp(items, table, cweights);
 
     for (size_t i = 0; i < cweights.size() - 1; i++) {
         if (cweights[i] - items[item][i + 1] < 0) {
@@ -94,7 +102,7 @@ int knapsack_helper(const vector<vector<int>> &items, map<vector<int>, int> &tab
         cweights[i] -= items[item][i + 1];
     }
 
-    int p2 = knapsack_helper(items, table, cweights) + items[item][0];
+    int p2 = knapsack_dp(items, table, cweights) + items[item][0];
 
     if (p2 >= p1) *val = p2;
     else *val = p1;
