@@ -4,6 +4,7 @@
 #include <map>
 #include <chrono>
 #include <stack>
+#include <cstring>
 
 using std::vector;
 using std::map;
@@ -169,48 +170,53 @@ int knapsack_dpi(const vector<vector<int>> &items, map<vector<int>, int> &table,
 
 int knapsack_backtracking(const vector<vector<int>> &items, const vector<int> &limits) {
 
-    std::vector<int> weights(limits.size());
-    int max_value = 0;
-    std::stack<bool> max_stack;
+    int limits_size = limits.size();
+    int items_size = items.size();
 
-    std::stack<bool> s;
-    for (size_t i = 0; i < items.size(); i++) s.push(false);
-    max_stack = s;
+    int weights[limits_size] {};
+
+    int max_value = 0;
+    bool max_stack[items_size] {};
+
+    bool stack[items_size] {};
+    int si = items_size - 1;
 
     int value = 0;
-    while (!s.empty()) {
-        bool top = s.top();
+    while (si != -1) {
+        bool top = stack[si];
 
         if (top) {
-            value -= items[s.size() - 1][0];
-            for (size_t i = 0; i < weights.size(); i++) weights[i] -= items[s.size() - 1][i + 1];
-            s.pop();
+            value -= items[si][0];
+            for (int i = 0; i < limits_size; i++) weights[i] -= items[si][i + 1];
+            si--;
             continue;
         }
 
-        s.pop();
-        s.push(1);
+        stack[si] = 1;
 
-        vector<int> tw(weights);
+        int tw[limits_size];
+        memcpy(tw, weights, sizeof(int) * limits_size);
+        
         bool isfit = true;
-        for (size_t i = 0; i < tw.size() && isfit; i++) {
-            tw[i] += items[s.size() - 1][i + 1];
+        for (int i = 0; i < limits_size && isfit; i++) {
+            tw[i] += items[si][i + 1];
             isfit = tw[i] <= limits[i];
         }
 
         if (!isfit) {
-            s.pop();
+            si--;
             continue;
         }
 
-        value += items[s.size() - 1][0];
-        weights = tw;
+        value += items[si][0];
+        memcpy(weights, tw, sizeof(int) * limits_size);
 
-        for (size_t i = s.size(); i < items.size(); i++) s.push(0);
+        for (; si < items_size; si++) stack[si] = 0;
+        si--;
 
         if (value >= max_value) {
             max_value = value;
-            max_stack = s;
+            memcpy(max_stack, stack, limits_size * sizeof(bool));
         }
     }
 
