@@ -212,6 +212,7 @@ int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_
     int si_min = si + 1;
 
     int value = 0;
+    bool prev = 0;
     while (si != -1 && !terminate) {
 
         bool top = stack[si];
@@ -223,11 +224,11 @@ int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_
                 si_min = si;
                 print_console(si_min, max_value, items_size);
             }
+            prev = top;
+            stack[si] = 0;
             si--;
             continue;
         }
-
-        stack[si] = 1;
 
         int tw[limits_size];
         memcpy(tw, weights, sizeof(int) * limits_size);
@@ -239,21 +240,27 @@ int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_
         }
 
         if (!isfit) {
-            si--;
+            if (!prev) si = items_size - 1;
+            else si--;
+            prev = 1;
             continue;
         }
 
+        stack[si] = 1;
+
         value += items[si][0];
         memcpy(weights, tw, sizeof(int) * limits_size);
-
-        for (si++; si < items_size; si++) stack[si] = 0;
-        si--;
 
         if (value >= max_value) {
             max_value = value;
             memcpy(max_stack, stack, items_size * sizeof(bool));
             print_console(si_min, max_value, items_size);
         }
+
+        if (prev) si = items_size - 1;
+        else si--;
+
+        prev = top;
     }
 
     for (size_t i = 0; i < items.size(); i++) items[i].push_back(max_stack[i]);
