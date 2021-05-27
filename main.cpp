@@ -186,6 +186,16 @@ int knapsack_dpi(const vector<vector<int>> &items, map<vector<int>, int> &table,
 
 int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
 
+    for (size_t i = 0; i < items.size(); i++) {
+        float val = 0;
+        for (size_t j = 0; j < limits.size(); j++) {
+            val += (float)items[i][j + 1] / limits[j];
+        }
+        val /= limits.size();
+        val = items[i][0] / val;
+        items[i].push_back(val);
+    }
+
     for (size_t i = 0; i < items.size(); i++) items[i].push_back(i);
     std::sort(items.begin(), items.end(), sortf);
 
