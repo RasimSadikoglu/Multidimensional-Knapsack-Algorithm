@@ -14,7 +14,7 @@ using std::map;
 void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits);
 int knapsack_dp(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> &weights);
 int knapsack_dpi(const vector<vector<int>> &items, map<vector<int>, int> &table, vector<int> weights);
-int knapsack_backtracking(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]);
+int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]);
 bool sortf(vector<int> v1, vector<int> v2);
 void handler(int num);
 void print_console(int stage, int max, int max_stage);
@@ -82,7 +82,7 @@ void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits)
     weights.push_back(items.size() - 1);
 
     bool max_stack[items.size()] {};
-    int result = knapsack_backtracking(items, limits, max_stack);
+    int result = knapsack_dfs(items, limits, max_stack);
 
     std::cout << result << std::endl;
     for (size_t i = 0; i < items.size(); i++) std::cout << max_stack[i];
@@ -184,10 +184,10 @@ int knapsack_dpi(const vector<vector<int>> &items, map<vector<int>, int> &table,
     return table[weights];
 }
 
-int knapsack_backtracking(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
+int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
 
     for (size_t i = 0; i < items.size(); i++) items[i].push_back(i);
-    std::sort(items.begin(), items.end());
+    std::sort(items.begin(), items.end(), sortf);
 
     int limits_size = limits.size();
     int items_size = items.size();
