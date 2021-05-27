@@ -91,6 +91,7 @@ void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits)
     std::ofstream output("output.txt", std::ofstream::out);
     output << result << std::endl;
     for (size_t i = 0; i < items.size(); i++) output << max_stack[i] << std::endl;
+    output.close();
 
     return;
 }
@@ -202,7 +203,7 @@ int knapsack_backtracking(vector<vector<int>> items, const vector<int> &limits, 
 
     int value = 0;
     while (si != -1 && !terminate) {
-        // For Debug
+
         bool top = stack[si];
 
         if (top) {
@@ -241,7 +242,7 @@ int knapsack_backtracking(vector<vector<int>> items, const vector<int> &limits, 
         if (value >= max_value) {
             max_value = value;
             memcpy(max_stack, stack, items_size * sizeof(bool));
-            //print_console(si_min, max_value, items_size);
+            print_console(si_min, max_value, items_size);
         }
     }
 
@@ -264,8 +265,12 @@ void handler(int num) {
 
 void print_console(int stage, int max, int max_stage) {
 
+    #if unix || __unix || __unix__
     system("clear");
-
+    #elif _WIN32 || _WIN64
+    system("cls");
+    #endif
+    
     std::cout << "Current Stage: " << max_stage - stage << "/" << max_stage << std::endl;
     std::cout << "Current Maximum Value: " << max << std::endl;
     std::cout << "Pressing CTRL+C will save current results." << std::endl;
