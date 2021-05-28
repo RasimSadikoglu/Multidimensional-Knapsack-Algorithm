@@ -19,7 +19,7 @@ bool sortf(vector<int> v1, vector<int> v2);
 void handler(int num);
 void print_console(int stage, int max, int max_stage);
 
-bool terminate = false;
+volatile bool terminate = false;
 
 int main(int argc, char **argv) {
 
@@ -75,12 +75,6 @@ int main(int argc, char **argv) {
 }
 
 void knapsack_solve(const vector<vector<int>> &items, const vector<int> &limits) {
-    map<vector<int>, int> table;
-
-    vector<int> weights(limits);
-
-    weights.push_back(items.size() - 1);
-
     bool max_stack[items.size()] {};
     int result = knapsack_dfs(items, limits, max_stack);
 
@@ -213,6 +207,7 @@ int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_
 
     int value = 0;
     bool prev = 0;
+
     while (si != -1 && !terminate) {
 
         bool top = stack[si];
@@ -251,7 +246,7 @@ int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_
         value += items[si][0];
         memcpy(weights, tw, sizeof(int) * limits_size);
 
-        if (value >= max_value) {
+        if (value > max_value) {
             max_value = value;
             memcpy(max_stack, stack, items_size * sizeof(bool));
             print_console(si_min, max_value, items_size);
