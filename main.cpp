@@ -19,7 +19,6 @@ using std::map;
 
 void knapsack_solve(vector<vector<int>> items, const vector<int> &limits);
 int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]);
-int knapsack_dfs_mirror(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]);
 void greedy_sort(vector<vector<int>> &items, const vector<int> &limits);
 bool sortf(vector<int> v1, vector<int> v2);
 void handler(int num);
@@ -97,7 +96,7 @@ void knapsack_solve(vector<vector<int>> items, const vector<int> &limits) {
 
     greedy_sort(items, limits);
 
-    vector<int> weights(limits.size());
+    /*vector<int> weights(limits.size());
     size_t i;
     bool isfit = true;
     for (i = items.size() - 1; i != -1 && isfit; i--) {
@@ -105,13 +104,13 @@ void knapsack_solve(vector<vector<int>> items, const vector<int> &limits) {
             isfit = (weights[j] += items[i][j + 1]) < limits[j];
         }
     }
-    i = items.size() - i;
+    i = items.size() - i;*/
 
     // Create a boolean array for result.
     bool max_stack[items.size()] {};
-    int result;
-    if (i < items.size() / 2) result = knapsack_dfs(items, limits, max_stack);
-    else result = knapsack_dfs_mirror(items, limits, max_stack);
+    int result = knapsack_dfs(items, limits, max_stack);
+    /*if (i < items.size() / 2) result = 
+    else result = knapsack_dfs_mirror(items, limits, max_stack);*/
 
     // Print the results to the stdout.
     std::cout << result << std::endl;
@@ -128,101 +127,6 @@ void knapsack_solve(vector<vector<int>> items, const vector<int> &limits) {
 }
 
 int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
-    // Save number of items and number of knapsacks for easy access.
-    int limits_size = limits.size();
-    int items_size = items.size();
-
-    // Current state of the knapsacks.
-    int weights[limits_size] {};
-
-    // Maximum value for knapsack.
-    int max_value = 0;
-
-    // A boolean array for depth first search and an index for it.
-    bool stack[items_size] {};
-    int si = items_size - 1;
-
-    // This is only for stage. Doesn't related with result or solution.
-    int si_min = si + 1;
-
-    // Current value and previous stack value.
-    int value = 0;
-    bool prev = 0;
-
-    // Main loop for traversing the tree.
-    while (si != -1 && !terminate) {
-
-        // Current value of stack at index si.
-        bool current = stack[si];
-
-        // Popping the item for the knapsacks.
-        if (current) {
-            value -= items[si][0];
-            for (int i = 0; i < limits_size; i++) weights[i] -= items[si][i + 1];
-
-            // Check for stage.
-            if (si < si_min) {
-                si_min = si;
-                print_console("DFS", items_size - si_min, max_value, items_size);
-            }
-
-            prev = current;
-            stack[si] = 0;
-            si--;
-            continue;
-        }
-
-        // Take a copy of weights array.
-        int tw[limits_size];
-        memcpy(tw, weights, sizeof(int) * limits_size);
-        
-        // Check for current item can fit into the knapsack.
-        bool isfit = true;
-        for (int i = 0; i < limits_size && isfit; i++) {
-            tw[i] += items[si][i + 1];
-            isfit = tw[i] <= limits[i];
-        }
-
-        // If It can't fit into the knapsack...
-        if (!isfit) {
-            //terminate = true;
-            // Update si according to prev.
-            if (!prev) si = items_size - 1;
-            else si--;
-            prev = 1;
-            continue;
-        }
-
-        stack[si] = 1;
-
-        // Update weights array.
-        value += items[si][0];
-        memcpy(weights, tw, sizeof(int) * limits_size);
-
-        // Check for the current path is better than previous solution.
-        if (value > max_value) {
-            max_value = value;
-            memcpy(max_stack, stack, items_size * sizeof(bool));
-            print_console("DFS", items_size - si_min, max_value, items_size);
-        }
-
-        // Update si according to prev.
-        if (prev) si = items_size - 1;
-        else si--;
-
-        prev = current;
-    }
-
-    // Sort the array by their order that given in the input file.
-    for (size_t i = 0; i < items.size(); i++) items[i].push_back(max_stack[i]);
-
-    std::sort(items.begin(), items.end(), sortf);
-    for (int i = 0; i < items_size; i++) max_stack[i] = items[i].back();
-
-    return max_value;
-}
-
-int knapsack_dfs_mirror(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
     int limits_size = limits.size();
     int items_size = items.size();
 
@@ -237,7 +141,7 @@ int knapsack_dfs_mirror(vector<vector<int>> items, const vector<int> &limits, bo
     int si_max = 0;
 
     int value = 0;
-    bool prev = 0;
+    bool prev = 1;
 
     for (int i = 0; i < items_size; i++) {
         value += items[i][0];
@@ -247,6 +151,9 @@ int knapsack_dfs_mirror(vector<vector<int>> items, const vector<int> &limits, bo
     }
 
     while (si < items_size && !terminate) {
+
+        /*for (int i = 0; i < items_size; i++) std::cout << stack[i];
+        std::cout << "\n";*/
 
         bool current = stack[si];
 
