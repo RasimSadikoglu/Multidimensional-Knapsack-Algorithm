@@ -186,7 +186,6 @@ int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_
 
         // If It can't fit into the knapsack...
         if (!isfit) {
-            terminate = true;
             // Update si according to prev.
             if (!prev) si = items_size - 1;
             else si--;
