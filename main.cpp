@@ -17,7 +17,7 @@ Rasim Sadıkoğlu 150118009
 using std::vector;
 using std::map;
 
-void knapsack_solve(vector<vector<int>> items, const vector<int> &limits);
+void knapsack_solve(vector<vector<int>> items, const vector<int> &limits, std::string file_name);
 int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]);
 void greedy_sort(vector<vector<int>> &items, const vector<int> &limits);
 bool sortf(vector<int> v1, vector<int> v2);
@@ -33,16 +33,17 @@ int main(int argc, char **argv) {
 
     // Input Section
     std::ifstream input;
+    std::string file_name;
     
     // Open File
     if (argc == 1) {
-        std::string file_name;
         std::cout << "Please enter the filename: ";
         std::cin >> file_name;
 
         input.open(file_name, std::ifstream::in);
     } else if (argc == 2) {
-        input.open(argv[1], std::ifstream::in);
+        file_name = argv[1];
+        input.open(file_name, std::ifstream::in);
     } else {
         std::cout << "Wrong Usage!\nUsage: " << argv[0] << " <filename>" << std::endl;
         return 1;
@@ -81,7 +82,7 @@ int main(int argc, char **argv) {
 
     // Start the timer for the algorithm.
     auto start_time = std::chrono::high_resolution_clock::now();
-    knapsack_solve(items, knapsack_limits);
+    knapsack_solve(items, knapsack_limits, file_name);
     auto end_time = std::chrono::high_resolution_clock::now();
 	
 	std::chrono::duration<double> duration = end_time - start_time;
@@ -92,7 +93,7 @@ int main(int argc, char **argv) {
 }
 
 // Helper function for the real algorithm.
-void knapsack_solve(vector<vector<int>> items, const vector<int> &limits) {
+void knapsack_solve(vector<vector<int>> items, const vector<int> &limits, std::string file_name) {
 
     greedy_sort(items, limits);
 
@@ -118,7 +119,7 @@ void knapsack_solve(vector<vector<int>> items, const vector<int> &limits) {
     std::cout << std::endl;
 
     // Create result file.
-    std::ofstream output("output.txt", std::ofstream::out);
+    std::ofstream output(file_name + "_output.txt", std::ofstream::out);
     output << result << std::endl;
     for (size_t i = 0; i < items.size(); i++) output << max_stack[i] << std::endl;
     output.close();
