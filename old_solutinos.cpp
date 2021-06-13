@@ -97,7 +97,10 @@ int knapsack_dpi(const vector<vector<int>> &items, map<vector<int>, int> &table,
     return table[weights];
 }
 
-int knapsack_dfs_old(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
+/*
+This is the old version of the dfs.
+*/
+int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
     // Save number of items and number of knapsacks for easy access.
     int limits_size = limits.size();
     int items_size = items.size();
