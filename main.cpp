@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    int number_of_knapsacks, number_of_items;
+    uint32_t number_of_knapsacks, number_of_items;
     input >> number_of_knapsacks >> number_of_items;
 
     // Get items' value.
@@ -115,21 +115,22 @@ void knapsack_solve(vector<vector<int>> items, const vector<int> &limits, std::s
 
     // Print the results to the stdout.
     std::cout << result << std::endl;
-    for (size_t i = 0; i < items.size(); i++) std::cout << max_stack[i];
+    uint32_t items_size = items.size();
+    for (size_t i = 0; i < items_size; i++) std::cout << max_stack[i];
     std::cout << std::endl;
 
     // Create result file.
     std::ofstream output(file_name + "_output.txt", std::ofstream::out);
     output << result << std::endl;
-    for (size_t i = 0; i < items.size(); i++) output << max_stack[i] << std::endl;
+    for (size_t i = 0; i < items_size; i++) output << max_stack[i] << std::endl;
     output.close();
 
     return;
 }
 
 int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_stack[]) {
-    int limits_size = limits.size();
-    int items_size = items.size();
+    uint32_t limits_size = limits.size();
+    uint32_t items_size = items.size();
 
     int weights[limits_size] {};
 
@@ -218,17 +219,18 @@ int knapsack_dfs(vector<vector<int>> items, const vector<int> &limits, bool max_
 }
 
 void greedy_sort(vector<vector<int>> &items, const vector<int> &limits) {
-    for (size_t i = 0; i < items.size(); i++) {
+    uint32_t item_size = items.size();
+    uint32_t limit_size = limits.size();
+    for (size_t i = 0; i < item_size; i++) {
         float val = 0;
-        for (size_t j = 0; j < limits.size(); j++) {
-            val += (float)items[i][j + 1] / limits[j];
+        for (size_t j = 0; j < limit_size; j++) {
+            val += ((float)items[i][j + 1] * limit_size)  / (limits[j]);
         }
-        val /= limits.size();
+        // val /= limit_size;
         val = items[i][0] / val;
         items[i].push_back(val);
     }
-
-    for (size_t i = 0; i < items.size(); i++) items[i].push_back(i);
+    for (size_t i = 0; i < item_size; i++) items[i].push_back(i);
     std::sort(items.begin(), items.end(), sortf);
 
     return;
