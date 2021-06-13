@@ -263,10 +263,10 @@ void handler(int num) {
 
 void print_console(std::string s, int stage, int max, int max_stage) {
 
-    #if unix || __unix || __unix__
-    system("clear");
-    #elif _WIN32 || _WIN64
+    #if _WIN32 || _WIN64
     system("cls");
+    #else
+    system("clear");
     #endif
     
     std::cout << s << "\n";
