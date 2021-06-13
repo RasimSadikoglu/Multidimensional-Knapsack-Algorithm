@@ -228,13 +228,12 @@ void greedy_sort(vector<vector<int>> &items, const vector<int> &limits) {
     /*
     GREEDY PART
     */
-    // The program could be optimized using a better greedy algorithm.
+    // The program could be optimized with using a better greedy algorithm.
     for (size_t i = 0; i < items.size(); i++) {
         float val = 0;
         for (size_t j = 0; j < limits.size(); j++) {
-            val += (float)items[i][j + 1] / limits[j];
+            val += ((float)items[i][j + 1] * limits.size())  / (limits[j]);
         }
-        val /= limits.size();
         val = items[i][0] / val;
         items[i].push_back(val);
     }
