@@ -5,8 +5,8 @@ Rasim Sadıkoğlu 150118009
 */
 
 /*
-This algorithms don't work with large samples. With small samples It produces the optimal solution.
-The problem is the memory. Other than that algorithms are correct.
+DP algorithms don't work with large samples. With small samples It produces the optimal solution.
+The problem is memory. Other than that algorithms are correct.
 */
 
 // Recursive DP
