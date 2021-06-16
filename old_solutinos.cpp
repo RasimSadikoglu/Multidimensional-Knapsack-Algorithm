@@ -1,10 +1,4 @@
 /*
-Bekir Nazmi Görkem 150118017
-Burak Çağlayan 150118027
-Rasim Sadıkoğlu 150118009
-*/
-
-/*
 DP algorithms don't work with large samples. With small samples It produces the optimal solution.
 The problem is memory. Other than that algorithms are correct.
 */
