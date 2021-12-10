@@ -141,6 +141,8 @@ int knapsack_dfs_mirror(vector<vector<int>> items, const vector<int> &limits, bo
         }
     }
 
+    std::cout << "\n\n\n\n";
+
     // Main loop for dfs.
     while (si < items_size && !terminate) {
         
@@ -250,20 +252,14 @@ bool sortf(vector<int> v1, vector<int> v2) {
 
 // Signal handler.
 void handler(int num) {
-    std::cout << "Saving current results...\n";
+    std::cout << "\b\bSaving current results...\n";
     terminate = true;
     return;
 }
 
 void print_console(std::string s, int stage, int max, int max_stage) {
-
-    #if _WIN32 || _WIN64
-    system("cls");
-    #else
-    system("clear");
-    #endif
     
-    std::cout << s << "\n";
+    std::cout << "\033[4F" << s << "\n";
     std::cout << "Current Stage: " << stage << "/" << max_stage << std::endl;
     std::cout << "Current Maximum Value: " << max << std::endl;
     std::cout << "Pressing CTRL+C will save current results." << std::endl;
